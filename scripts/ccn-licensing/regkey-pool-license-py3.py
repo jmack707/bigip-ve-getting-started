@@ -150,7 +150,7 @@ def main():
     credentials = {
         "username":           bigiq_user,
         "password":           bigiq_pass,
-        "loginProvideriName": "RadiusServer",
+        "loginProviderName": "RadiusServer",
     }
 
     # ── Load BIG-IP license target data ─────────────────────────────────────

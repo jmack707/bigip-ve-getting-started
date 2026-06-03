@@ -183,7 +183,7 @@ _bigiqAddress = raw_input("Enter Management IP address of BIG-IQ: ")
 _credPostBody = {
     "username":           "{_uname}".format(_uname=_userID),
     "password":           "{_pword}".format(_pword=_password),
-    "loginProvideriName": "RadiusServer"
+    "loginProviderName": "RadiusServer"
 }
 
 _deviceToBeLicensed = licenseData()
