@@ -255,7 +255,7 @@ Devices → LICENSE MANAGEMENT → Licenses → [pool name] → locate the devic
 | Resource | URL |
 |----------|-----|
 | K15690: Overview of BIG-IP VE licensing | https://support.f5.com/csp/article/K15690 |
-| K26521163: BIG-IQ pool-based licensing for BIG-IP VE | https://support.f5.com/csp/article/K26521163 |
+| K02061834: License BIG-IP VE from BIG-IQ License Manager | https://my.f5.com/manage/s/article/K02061834 |
 | BIG-IQ License Manager deployment guide | https://techdocs.f5.com/en-us/bigiq-8-0-0/managing-big-ip-ve-subscriptions-from-big-iq/deploy-license-iq-license-manager.html |
 | Script reference | [scripts/ccn-licensing/README.md](../../scripts/ccn-licensing/README.md) |
 
