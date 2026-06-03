@@ -1,0 +1,5 @@
+# Never commit real license data files
+scripts/ccn-licensing/lic-data.json
+scripts/ccn-licensing/*_bigip.license
+*.license
+*.ucs

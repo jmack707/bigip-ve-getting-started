@@ -21,20 +21,23 @@ flowchart LR
     C --> D[3. Deploy VM]
     D --> E[4. First Boot]
     E --> F{License\nmethod?}
-    F -->|Online| G[Auto Activation]
-    F -->|Jump host| H[File-Based]
-    F -->|Air-gapped / Federal| I[CCN / BIG-IQ Pool]
-    G --> J[6. Provision Modules]
-    H --> J
-    I --> J
-    J --> K[7. VLANs]
-    K --> L[8. Self-IPs]
-    L --> M[9. Routing]
-    M --> N[10. Validate & Backup]
-    N --> O([Done ✓])
+    F -->|Online| G[Method A: Auto]
+    F -->|Jump host| H[Method B: File]
+    F -->|Air-gapped| I[Method C: CCN]
+    F -->|BIG-IQ pool| J[Method D: BIG-IQ]
+    G --> K[6. Provision Modules]
+    H --> K
+    I --> K
+    J --> K
+    K --> L[7. VLANs]
+    L --> M[8. Self-IPs]
+    M --> N[9. Routing]
+    N --> O[10. Validate & Backup]
+    O --> P([Done ✓])
 
     style I fill:#c00,color:#fff
-    style F fill:#2E5FA3,color:#fff
+    style J fill:#2E5FA3,color:#fff
+    style F fill:#444,color:#fff
 ```
 
 ---
@@ -50,6 +53,10 @@ Work through these in order. Each is a standalone document in [`docs/`](./docs/)
 | 3 | [Deploying the VM](./docs/03-deploy.md) | 15–30 min |
 | 4 | [First Boot & Initial Setup](./docs/04-first-boot.md) | 10 min |
 | 5 | [Licensing](./docs/05-licensing.md) | 5–15 min |
+| — | &nbsp;&nbsp;↳ [Method A: Automatic (online)](./docs/licensing/method-a-automatic.md) | |
+| — | &nbsp;&nbsp;↳ [Method B: Manual (file-based)](./docs/licensing/method-b-manual.md) | |
+| — | &nbsp;&nbsp;↳ [Method C: CCN Self-Service (air-gap)](./docs/licensing/method-c-ccn.md) | |
+| — | &nbsp;&nbsp;↳ [Method D: BIG-IQ Pool (unreachable device)](./docs/licensing/method-d-bigiq-pool.md) | |
 | 6 | [Module Provisioning](./docs/06-provisioning.md) | 5 min |
 | 7 | [VLAN Configuration](./docs/07-vlans.md) | 10 min |
 | 8 | [Self-IP Addresses](./docs/08-self-ips.md) | 5 min |
@@ -63,7 +70,7 @@ Work through these in order. Each is a standalone document in [`docs/`](./docs/)
 
 ## Experienced user?
 
-If you've deployed BIG-IP before and just need the command sequence, go straight to the **[Quick-Start Cheat Sheet](./docs/quick-start.md)**.
+Go straight to the **[Quick-Start Cheat Sheet](./docs/quick-start.md)** for the minimal TMSH command sequence.
 
 ---
 
@@ -79,18 +86,18 @@ If you've deployed BIG-IP before and just need the command sequence, go straight
 
 ## BIG-IP version coverage
 
-Applies to BIG-IP VE **15.x, 16.x, and 17.x**. Always cross-check hypervisor compatibility against the [BIG-IP VE Supported Platforms matrix](https://clouddocs.f5.com/cloud/public/v1/matrix.html) before deploying. Check [K5903](https://support.f5.com/csp/article/K5903) for the technical support lifecycle of your chosen version.
+Applies to BIG-IP VE **15.x, 16.x, and 17.x**. Always cross-check hypervisor compatibility against the [BIG-IP VE Supported Platforms matrix](https://clouddocs.f5.com/cloud/public/v1/matrix.html) before deploying. Check [K5903](https://support.f5.com/csp/article/K5903) for the support lifecycle of your chosen version.
 
 ---
 
 ## Licensing paths covered
 
-| Method | Requires internet? | When to use |
-|--------|--------------------|-------------|
-| Automatic (online) | ✅ Yes | Internet-connected labs and standard environments |
-| Manual (file-based) | ❌ No | Jump host can reach portal; BIG-IP cannot |
-| CCN Self-Service Utility | ❌ No | True air-gap; no BIG-IQ on-site; requires F5 pre-approval |
-| BIG-IQ Pool (unreachable device) | ❌ No | BIG-IQ deployed inside the restricted enclave; ELA/pool licensing |
+| Method | BIG-IP internet? | BIG-IQ needed? | When to use |
+|--------|-----------------|----------------|-------------|
+| A — Automatic (online) | ✅ Yes | ❌ No | Internet-connected environments |
+| B — Manual (file-based) | ❌ No | ❌ No | Jump host can reach F5 portal; BIG-IP cannot |
+| C — CCN Self-Service | ❌ No | ❌ No | True air-gap; requires F5 CCN pre-approval |
+| D — BIG-IQ Pool | ❌ No (BIG-IP) | ✅ Yes | BIG-IQ connected; BIG-IP isolated |
 
 ---
 
@@ -101,16 +108,29 @@ bigip-ve-getting-started/
 ├── README.md
 ├── CONTRIBUTING.md
 ├── CHANGELOG.md
+├── .gitignore
 ├── .github/
 │   └── workflows/
 │       └── link-check.yml
+├── scripts/
+│   └── ccn-licensing/
+│       ├── README.md
+│       ├── regkey-pool-license.py               ← Python 2 (run on BIG-IQ)
+│       ├── regkey-pool-license-py3.py            ← Python 3 (run on jump host)
+│       ├── lic-data.json.example
+│       └── lic-data.json.example-with-optional-fields
 └── docs/
     ├── quick-start.md
     ├── 01-prerequisites.md
     ├── 02-download.md
     ├── 03-deploy.md
     ├── 04-first-boot.md
-    ├── 05-licensing.md          ← expanded with CCN + BIG-IQ unreachable device
+    ├── 05-licensing.md               ← licensing method selector
+    ├── licensing/
+    │   ├── method-a-automatic.md
+    │   ├── method-b-manual.md
+    │   ├── method-c-ccn.md
+    │   └── method-d-bigiq-pool.md
     ├── 06-provisioning.md
     ├── 07-vlans.md
     ├── 08-self-ips.md

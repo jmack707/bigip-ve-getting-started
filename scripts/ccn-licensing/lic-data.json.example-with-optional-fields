@@ -1,0 +1,10 @@
+{
+    "licensePoolName": "BIG-IP-VE-Pool-FEDRAMP",
+    "command": "assign",
+    "address": "10.1.1.10",
+    "assignmentType": "UNREACHABLE",
+    "macAddress": "06:ce:c2:43:b3:05",
+    "hypervisor": "vmware",
+    "chargebackTag": "PROJ-2024-DOD",
+    "tenant": "Agency-XYZ"
+}
